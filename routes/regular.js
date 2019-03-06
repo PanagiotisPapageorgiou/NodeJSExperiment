@@ -18,4 +18,11 @@ router.get('/GET/classic_b64', regular_controller.classic_b64_get);
 router.get('/POST/classic_b64', regular_controller.classic_b64_post);
 router.post('/POST/classic_b64', regular_controller.classic_b64_post);
 
+// Classic hex Example - GET
+router.get('/GET/classic_hex', regular_controller.classic_hex_get);
+
+// Classic hex Example - POST Form
+router.get('/POST/classic_hex', regular_controller.classic_hex_post);
+router.post('/POST/classic_hex', regular_controller.classic_hex_post);
+
 module.exports = router;
