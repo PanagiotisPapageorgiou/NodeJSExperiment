@@ -190,82 +190,43 @@ function ping_an_address_hex(res, addr, template_name, template_title) {
   }
 }
 
-exports.classic_get = function(req, res, next) {
-  var cookie_name = "addr";
+exports.lax_domain_name = function(req, res, next) {
+  if (req.method === 'GET') { // Form fetching
+    return res.render('regular_classic_post', { title: 'Regex for domain name validation' });
+  } else { // Form submitting
+      var addr = req.body.addr;
 
-  var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-  if (ip.substr(0, 7) == "::ffff:") {
-    ip = ip.substr(7)
+      if (addr !== undefined) {
+        var my_res = addr.match("^\\w+\\..*\\w+\\.\\w+$");
+        if (addr.match("^\\w+\\..*\\w+\\.\\w+$") == null) {
+          return res.render('regular_classic_post', { title: 'Regex for domain name validation', exec_res: 'Invalid domain format' });
+        }
+      } else {
+        return res.render('regular_classic_post', { title: 'Regex for domain name validation', exec_res: 'Invalid domain format' });
+      }
+
+      return ping_an_address(res, addr, 'regular_classic_post', 'Regex for domain name validation');
   }
+};
 
-  var cookie_value = ip
+exports.multiple_os_commands_blacklisting = function(req, res, next) {
+  if (req.method === 'GET') { // Form fetching
+    return res.render('regular_classic_post', { title: 'Regex filter for OS commands (Windows / *nix)' });
+  } else { // Form submitting
+      var addr = req.body.addr;
 
-  let options = {
-      expire: (new Date).getTime() + (86400 * 30)
+      if (addr !== undefined) {
+        if (os.type().includes('Windows NT')) {
+            if (addr.match("powershell|cmd") != null) {
+              return res.render('regular_classic_post', { title: 'Regex for domain name validation', exec_res: 'Hack attempt detected!' });
+            }
+        } else {
+            if (addr.match("echo|wget|nc|whoami|cat|ncat") != null) {
+              return res.render('regular_classic_post', { title: 'Regex for domain name validation', exec_res: 'Hack attempt detected!' });
+            }
+        }
+      }
+
+      return ping_an_address(res, addr, 'regular_classic_post', 'Regex filter for OS commands (Windows / *nix)');
   }
-
-  // Set cookie
-  res.cookie(cookie_name, cookie_value, options) // options is optional
-  addr = req.query.addr;
-  return ping_an_address(res, cookie_value, 'cookie_classic', 'Cookie Classic'); 
-};
-
-exports.b64_get = function(req, res, next) {
-  // var cookie_name = "addr";
-
-  // var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-  // if (ip.substr(0, 7) == "::ffff:") {
-  //   ip = ip.substr(7)
-  // }
-
-  // var cookie_value = ip
-
-  // let options = {
-  //     expire: (new Date).getTime() + (86400 * 30)
-  // }
-
-  // // Set cookie
-  // res.cookie(cookie_name, cookie_value, options) // options is optional
-  // addr = req.query.addr;
-  // return ping_an_address(res, cookie_value, 'cookie_b64', 'Cookie B64'); 
-};
-
-exports.blind_get = function(req, res, next) {
-  // var cookie_name = "addr";
-
-  // var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-  // if (ip.substr(0, 7) == "::ffff:") {
-  //   ip = ip.substr(7)
-  // }
-
-  // var cookie_value = ip
-
-  // let options = {
-  //     expire: (new Date).getTime() + (86400 * 30)
-  // }
-
-  // // Set cookie
-  // res.cookie(cookie_name, cookie_value, options) // options is optional
-  // addr = req.query.addr;
-  // return ping_an_address(res, cookie_value, 'cookie_blind', 'Cookie BLind'); 
-};
-
-exports.eval_get = function(req, res, next) {
-  // var cookie_name = "addr";
-
-  // var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-  // if (ip.substr(0, 7) == "::ffff:") {
-  //   ip = ip.substr(7)
-  // }
-
-  // var cookie_value = ip
-
-  // let options = {
-  //     expire: (new Date).getTime() + (86400 * 30)
-  // }
-
-  // // Set cookie
-  // res.cookie(cookie_name, cookie_value, options) // options is optional
-  // addr = req.query.addr;
-  // return ping_an_address(res, cookie_value, 'cookie_eval', 'Cookie Eval'); 
 };
