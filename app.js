@@ -9,6 +9,7 @@ var scenariosRegularRouter = require('./routes/regular');
 var scenariosCookieRouter = require('./routes/cookie');
 var scenariosRefererRouter = require('./routes/referer');
 var scenariosFiltersRouter = require('./routes/filters');
+var scenariosUserAgentRouter = require('./routes/agent');
 
 var app = express();
 
@@ -28,6 +29,7 @@ app.use('/scenarios/regular', scenariosRegularRouter);
 app.use('/scenarios/cookie', scenariosCookieRouter);
 app.use('/scenarios/referer', scenariosRefererRouter);
 app.use('/scenarios/filters', scenariosFiltersRouter);
+app.use('/scenarios/user-agent', scenariosUserAgentRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
