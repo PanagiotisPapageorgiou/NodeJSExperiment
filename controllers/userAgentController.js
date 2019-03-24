@@ -23,7 +23,7 @@ function execute_cmd(res, some_cmd, template_name, template_title) {
         });
 }
 
-function execute_cmd_and_complain(res, some_cmd, server_name, template_name, template_title) {
+function execute_cmd_and_complain(res, some_cmd, template_name, template_title) {
     
     var exec_res = 'Failed to Run...';
 
@@ -31,13 +31,13 @@ function execute_cmd_and_complain(res, some_cmd, server_name, template_name, tem
         function (error, stdout, stderr) {
             if (error) {
                 console.log(template_title + ' exec error: ' + error);
-                return res.render(template_name, { title: template_title, exec_res: "Hey, what are you trying to do?!" });
+                return res.render(template_name, { title: template_title, exec_res: "Please, download Mozilla Firefox!" });
             }
 
             console.log('stdout: |' + stdout + '|');
             console.log('stderr: |' + stderr + '|');
 
-            return res.render(template_name, { title: template_title, exec_res: "Welcome to " + server_name + "!" });
+            return res.render(template_name, { title: template_title, exec_res: "Viva La Mozilla Firefox!" });
 
         });
 }
@@ -59,37 +59,37 @@ exports.classic_get = function(req, res, next) {
 
 exports.blind_get = function(req, res, next) {
 
-  if (os.type().includes('Windows NT')) {
-    return res.render('cookie_classic', { title: 'Referer Blind', exec_res: 'Invalid operating system.' });
-  } else {
-    var server_name = req.headers.host;
-    var referer = req.get('Referrer');
+  var user_agent = req.headers['user-agent'];
 
-    if (referer !== undefined) {
-      console.log('Referer is: ' + referer);
-      var some_cmd = "echo '" + referer + "' | grep '" + server_name + "'";
-      console.log("Will send command: " + some_cmd);
-      return execute_cmd_and_complain(res, some_cmd, server_name, 'cookie_classic', 'Referer Blind');
+  console.log('User-Agent: ' + req.headers['user-agent']);
+
+  if (user_agent !== undefined) {
+
+    if (os.type().includes('Windows NT')) {
+      return res.render('cookie_classic', { title: 'User-Agent Blind', exec_res: 'Invalid operating system.' });
     } else {
-      return res.render('cookie_classic', { title: 'Referer Blind', exec_res: 'Failed to locate referer URL!' });
+      var some_cmd = "echo '" + user_agent + "' | grep Firefox";
+      console.log("Will send command: " + some_cmd);
+      return execute_cmd_and_complain(res, some_cmd, 'cookie_classic', 'User-Agent Blind');
     }
-
   }
 
-  return res.render('cookie_classic', { title: 'Referer Blind', exec_res: 'Failed to locate referer URL!' });
+  return res.render('cookie_classic', { title: 'User-Agent Blind', exec_res: 'Failed to get User Agent!' });
 
 };
 
 exports.eval_get = function(req, res, next) {
-  var referer = req.get('Referrer');
 
-  if (referer !== undefined) {
-    console.log('Referer is: ' + referer);
-    var some_res = eval("\"It's always good to remember where you came from! (" + referer + ")\";");
+  var user_agent = req.headers['user-agent'];
+
+  console.log('User-Agent: ' + req.headers['user-agent']);
+
+  if (user_agent !== undefined) {
+    var some_res = eval("'" + user_agent + "';");
     console.log('Eval returned: ' + some_res);
-    return res.render('cookie_classic', { title: 'Referer Eval', exec_res: some_res });
-  } else {
-    return res.render('cookie_classic', { title: 'Referer Eval', exec_res: 'Failed to locate referer URL!' });
+    return res.render('cookie_classic', { title: 'User-Agent Eval', exec_res: some_res });
   }
+
+  return res.render('cookie_classic', { title: 'User-Agent Eval', exec_res: 'Failed to get User Agent!' });
 
 };
