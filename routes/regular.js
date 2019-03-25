@@ -25,4 +25,25 @@ router.get('/GET/classic_hex', regular_controller.classic_hex_get);
 router.get('/POST/classic_hex', regular_controller.classic_hex_post);
 router.post('/POST/classic_hex', regular_controller.classic_hex_post);
 
+// Classic Quote Example - GET
+router.get('/GET/classic_quote', regular_controller.classic_quote_get);
+
+// Classic Quote Example - POST Form
+router.get('/POST/classic_quote', regular_controller.classic_quote_post);
+router.post('/POST/classic_quote', regular_controller.classic_quote_post);
+
+// Classic Double Quote Example - GET
+router.get('/GET/classic_double_quote', regular_controller.classic_double_quote_get);
+
+// Classic Double Quote Example - POST Form
+router.get('/POST/classic_double_quote', regular_controller.classic_double_quote_post);
+router.post('/POST/classic_double_quote', regular_controller.classic_double_quote_post);
+
+// Classic Non Space Example - GET
+router.get('/GET/classic_non_space', regular_controller.classic_non_space_get);
+
+// Classic Non Space Example - POST Form
+router.get('/POST/classic_non_space', regular_controller.classic_non_space_post);
+router.post('/POST/classic_non_space', regular_controller.classic_non_space_post);
+
 module.exports = router;
