@@ -317,6 +317,97 @@ function get_md5sum_of_string(res, someString, template_name, template_title) {
         });
 }
 
+function ping_an_address_and_complain(res, addr, template_name, template_title) {
+
+  if (addr === undefined) {
+    console.log('Page load for ' + template_name);    
+    return res.render(template_name, { title: template_title });
+  } else {
+    console.log('User submitted addr: |' + addr + '|');
+    console.log(os.type()); // "Windows_NT"
+    console.log(os.release()); // "10.0.14393"
+    console.log(os.platform()); // "win32"
+    
+    var exec_res = 'Failed to Run...';
+    var ping_command = '/bin/ping -c 4 ';
+
+    if (os.type().includes('Windows NT')) {
+        ping_command = 'ping ';
+    }
+
+    child = exec(ping_command + addr,
+        function (error, stdout, stderr) {
+            if (error) {
+                console.log(template_name + ' exec error: ' + error);
+                return res.render(template_name, { title: template_title, exec_res: 'The ip ' + addr + ' seems to be down!' });
+            }
+
+            console.log('stdout: |' + stdout + '|');
+            console.log('stderr: |' + stderr + '|');
+
+            exec_res = null;
+
+            if (stdout.includes('\n')) {
+                var lines = stdout.split('\n');
+                for (var i = 0; i < lines.length; i++) {
+                    if (lines[i].includes('rtt min/avg/max/mdev =')) {
+                        exec_res = lines[i];
+                        break;
+                    }
+                }
+            }
+            
+            if (exec_res == null) {
+                console.log(template_name + ' Failed to locate of average results of ping!')
+                return res.render(template_name, { title: template_title, exec_res: 'The ip ' + addr + ' seems to be down!' });
+            }
+            else {
+                return res.render(template_name, { 
+                    title: template_title,
+                    exec_res: 'The ip ' + addr + ' seems to be up and running!'
+                });
+            }
+        });
+  }
+}
+
+function ping_an_address_and_complain_dev_null(res, addr, template_name, template_title) {
+
+  if (addr === undefined) {
+    console.log('Page load for ' + template_name);    
+    return res.render(template_name, { title: template_title });
+  } else {
+    console.log('User submitted addr: |' + addr + '|');
+    console.log(os.type()); // "Windows_NT"
+    console.log(os.release()); // "10.0.14393"
+    console.log(os.platform()); // "win32"
+    
+    var exec_res = 'Failed to Run...';
+    var ping_command = '/bin/ping -c 4 ';
+
+    if (os.type().includes('Windows NT')) {
+        return res.render(template_name, { title: template_title, exec_res: 'This scenarios does not work in Windows!' });
+    }
+
+    child = exec(ping_command + addr + '> /dev/null &',
+        function (error, stdout, stderr) {
+            if (error) {
+                console.log(template_name + ' exec error: ' + error);
+                return res.render(template_name, { title: template_title, exec_res: 'The ip ' + addr + ' seems to be down!' });
+            }
+
+            console.log('stdout: |' + stdout + '|');
+            console.log('stderr: |' + stderr + '|');
+            
+            return res.render(template_name, { 
+                title: template_title,
+                exec_res: 'The ip ' + addr + ' seems to be up and running!'
+            });
+
+        });
+  }
+}
+
 exports.classic_get = function(req, res, next) {
   addr = req.query.addr;
   return ping_an_address(res, addr, 'regular_classic_get', 'Regular Classic GET Form'); 
@@ -511,4 +602,48 @@ exports.classic_basic_auth_post = function(req, res, next) {
 
   console.log('Login occurred successfully!');
   return exports.classic_post(req, res);
+};
+
+exports.blind_get = function(req, res, next) {
+
+  var addr = req.query.addr;
+
+  if (addr === undefined) {
+    return res.render('regular_classic_get', { title: 'Blind regular example' });
+  }
+
+  return ping_an_address_and_complain(res, addr, 'regular_classic_get', 'Blind regular example'); 
+};
+
+exports.blind_post = function(req, res, next) {
+
+ var  addr = req.body.addr;
+
+  if (addr === undefined) {
+    return res.render('regular_classic_post', { title: 'Blind regular example' });
+  }
+
+  return ping_an_address_and_complain(res, addr, 'regular_classic_post', 'Blind regular example'); 
+};
+
+exports.double_blind_get = function(req, res, next) {
+
+  var addr = req.query.addr;
+
+  if (addr === undefined) {
+    return res.render('regular_classic_get', { title: 'Blind regular example' });
+  }
+
+  return ping_an_address_and_complain_dev_null(res, addr, 'regular_classic_get', 'Blind regular example'); 
+};
+
+exports.double_blind_post = function(req, res, next) {
+
+ var  addr = req.body.addr;
+
+  if (addr === undefined) {
+    return res.render('regular_classic_post', { title: 'Blind regular example' });
+  }
+
+  return ping_an_address_and_complain_dev_null(res, addr, 'regular_classic_post', 'Blind regular example'); 
 };

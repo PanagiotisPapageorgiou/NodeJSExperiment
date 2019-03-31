@@ -68,4 +68,18 @@ router.get('/GET/classic_basic_auth', basicAuth({users: { 'admin': 'admin' }, un
 router.get('/POST/classic_basic_auth', basicAuth({users: { 'admin': 'admin' }, unauthorizedResponse: 'Sorry - you need valid credentials to be granted access!', challenge: true}), regular_controller.classic_basic_auth_post);
 router.post('/POST/classic_basic_auth', basicAuth({users: { 'admin': 'admin' }, unauthorizedResponse: 'Sorry - you need valid credentials to be granted access!', challenge: true}), regular_controller.classic_basic_auth_post);
 
+// Blind - GET
+router.get('/GET/blind', regular_controller.blind_get);
+
+// Blind - POST Form
+router.get('/POST/blind', regular_controller.blind_post);
+router.post('/POST/blind', regular_controller.blind_post);
+
+// Double Blind - GET
+router.get('/GET/double_blind', regular_controller.double_blind_get);
+
+// Double Blind - POST Form
+router.get('/POST/double_blind', regular_controller.double_blind_post);
+router.post('/POST/double_blind', regular_controller.double_blind_post);
+
 module.exports = router;
