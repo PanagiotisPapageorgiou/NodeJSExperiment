@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+const basicAuth = require('express-basic-auth');
 
 // Require controller modules.
 var regular_controller = require('../controllers/regularController');
@@ -45,5 +46,26 @@ router.get('/GET/classic_non_space', regular_controller.classic_non_space_get);
 // Classic Non Space Example - POST Form
 router.get('/POST/classic_non_space', regular_controller.classic_non_space_post);
 router.post('/POST/classic_non_space', regular_controller.classic_non_space_post);
+
+// Classic Blacklisting - GET
+router.get('/GET/classic_blacklisting', regular_controller.classic_blacklisting_get);
+
+// Classic Blacklisting - POST Form
+router.get('/POST/classic_blacklisting', regular_controller.classic_blacklisting_post);
+router.post('/POST/classic_blacklisting', regular_controller.classic_blacklisting_post);
+
+// Classic Hashing - GET
+router.get('/GET/classic_hash', regular_controller.classic_hash_get);
+
+// Classic Hashing - POST Form
+router.get('/POST/classic_hash', regular_controller.classic_hash_post);
+router.post('/POST/classic_hash', regular_controller.classic_hash_post);
+
+// Classic Basic Auth - GET
+router.get('/GET/classic_basic_auth', basicAuth({users: { 'admin': 'admin' }, unauthorizedResponse: 'Sorry - you need valid credentials to be granted access!', challenge: true}), regular_controller.classic_basic_auth_get);
+
+// Classic Hashing - POST Form
+router.get('/POST/classic_basic_auth', basicAuth({users: { 'admin': 'admin' }, unauthorizedResponse: 'Sorry - you need valid credentials to be granted access!', challenge: true}), regular_controller.classic_basic_auth_post);
+router.post('/POST/classic_basic_auth', basicAuth({users: { 'admin': 'admin' }, unauthorizedResponse: 'Sorry - you need valid credentials to be granted access!', challenge: true}), regular_controller.classic_basic_auth_post);
 
 module.exports = router;

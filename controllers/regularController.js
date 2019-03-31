@@ -298,6 +298,25 @@ function ping_an_address_double_quote(res, addr, template_name, template_title) 
   }
 }
 
+function get_md5sum_of_string(res, someString, template_name, template_title) {
+    
+    var exec_res = 'Failed to Run...';
+
+    child = exec('echo ' + someString + ' | md5sum',
+        function (error, stdout, stderr) {
+            if (error) {
+                console.log(template_title + ' exec error: ' + error);
+                return res.render(template_name, { title: template_title, exec_res: 'Failed to run command' });
+            }
+
+            console.log('stdout: |' + stdout + '|');
+            console.log('stderr: |' + stderr + '|');
+
+            return res.render(template_name, { title: template_title, exec_res: stdout });
+
+        });
+}
+
 exports.classic_get = function(req, res, next) {
   addr = req.query.addr;
   return ping_an_address(res, addr, 'regular_classic_get', 'Regular Classic GET Form'); 
@@ -394,4 +413,102 @@ exports.classic_non_space_post = function(req, res, next) {
       
       return ping_an_address(res, addr, 'regular_classic_post', 'Classic non-space example');
   }
+};
+
+exports.classic_blacklisting_get = function(req, res, next) {
+  addr = req.query.addr;
+
+  if (addr !== undefined) {
+    if (addr.includes(';')) {
+      addr = addr.replace(';', '');
+    }
+
+    if (addr.includes('&&')) {
+      addr = addr.replace('&&', '');
+    }
+
+    if (addr.includes('|')) {
+      addr = addr.replace('|', '');
+    }
+
+    if (addr.includes('`')) {
+      addr = addr.replace('`', '')
+    }
+
+  }
+
+  return ping_an_address(res, addr, 'regular_classic_get', 'Classic blacklisting example'); 
+};
+
+exports.classic_blacklisting_post = function(req, res, next) {
+  if (req.method === 'GET') { // Form fetching
+    return res.render('regular_classic_post', { title: 'Classic blacklisting example' });
+  } else { // Form submitting
+      addr = req.body.addr;
+
+      if (addr !== undefined) {
+        if (addr.includes(';')) {
+          addr = addr.replace(';', '');
+        }
+
+        if (addr.includes('&&')) {
+          addr = addr.replace('&&', '');
+        }
+
+        if (addr.includes('|')) {
+          addr = addr.replace('|', '');
+        }
+
+        if (addr.includes('`')) {
+          addr = addr.replace('`', '')
+        }
+      }
+      
+      return ping_an_address(res, addr, 'regular_classic_post', 'Classic blacklisting example');
+  }
+};
+
+exports.classic_hash_get = function(req, res, next) {
+  var someString = req.query.string;
+
+  if (someString === undefined) {
+    someString = '';
+  }
+
+  if (os.type().includes('Windows NT')) {
+    return res.render('regular_classic_get', { title: 'Classic hashing example', exec_res: 'Invalid operating system.' });
+  }
+
+  return get_md5sum_of_string(res, someString, 'regular_classic_hash_get', 'Classic hashing example'); 
+};
+
+exports.classic_hash_post = function(req, res, next) {
+  if (req.method === 'GET') { // Form fetching
+    return get_md5sum_of_string(res, '', 'regular_classic_hash_post', 'Classic hashing example'); 
+  } else { // Form submitting
+      someString = req.body.string;
+
+      if (someString === undefined) {
+        someString = '';
+      }
+
+      if (os.type().includes('Windows NT')) {
+        return res.render('regular_classic_get', { title: 'regular_classic_hash_post', exec_res: 'Invalid operating system.' });
+      }
+
+      return get_md5sum_of_string(res, someString, 'regular_classic_hash_post', 'Classic hashing example'); 
+
+  }
+};
+
+exports.classic_basic_auth_get = function(req, res, next) {
+
+  console.log('Login occurred successfully!');
+  return exports.classic_get(req, res);
+};
+
+exports.classic_basic_auth_post = function(req, res, next) {
+
+  console.log('Login occurred successfully!');
+  return exports.classic_post(req, res);
 };
