@@ -1066,3 +1066,71 @@ exports.preg_match_blind_post = function(req, res, next) {
       return ping_an_address_specific_format_blind(res, addr, 'regular_classic_post', 'Preg_match() blind example POST Form');
   }
 };
+
+exports.str_replace_get = function(req, res, next) {
+
+  var user = req.query.user;
+
+  if (user === undefined) {
+    return res.render('regular_eval_get', { title: 'Str_Replace() regular example' });
+  }
+
+  user = user.replace('\\', '');
+  user = user.replace("'", "");
+  user = user.replace('"', '');
+
+  var some_res = eval("\"" + user + "\";");
+  console.log('Str_Replace_Get returned: ' + some_res);
+
+  return res.render('regular_eval_get', { title: 'Str_Replace() regular example', exec_res: some_res });
+};
+
+exports.str_replace_post = function(req, res, next) {
+
+  var user = req.body.user;
+
+  if (user === undefined) {
+    return res.render('regular_eval_post', { title: 'Str_Replace() regular example' });
+  }
+
+  user = user.replace('\\', '');
+  user = user.replace("'", "");
+  user = user.replace('"', '');
+
+  var some_res = eval("\"" + user + "\";");
+  console.log('Str_Replace_Get returned: ' + some_res);
+
+  return res.render('regular_eval_post', { title: 'Str_Replace() regular example', exec_res: some_res });
+};
+
+exports.create_function_get = function(req, res, next) {
+
+    var user = req.query.user;
+
+    if (user === undefined) {
+        return res.render('regular_eval_get', { title: 'Create_Function() regular example' });
+    }
+
+    var myFunc = new Function("", "return \"Hello, " + user + "!\";");
+    var some_res = myFunc('');
+
+    console.log('Create_Function_Get returned: ' + some_res);
+
+    return res.render('regular_eval_get', { title: 'Create_Function() regular example', exec_res: some_res });
+};
+
+exports.create_function_post = function(req, res, next) {
+
+    var user = req.body.user;
+
+    if (user === undefined) {
+        return res.render('regular_eval_post', { title: 'Create_Function() regular example' });
+    }
+
+    var myFunc = new Function("", "return \"Hello, " + user + "!\";");
+    var some_res = myFunc('');
+
+    console.log('Create_Function_Post returned: ' + some_res);
+
+    return res.render('regular_eval_post', { title: 'Create_Function() regular example', exec_res: some_res });
+};

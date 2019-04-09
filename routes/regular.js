@@ -132,18 +132,18 @@ router.post('/POST/preg_match_blind', regular_controller.preg_match_blind_post);
 // // Preg_Replace() - GET
 // router.get('/GET/preg_replace\\?replace=/Hello/&with=Bye', regular_controller.preg_replace_get);
 
-// // Str_Replace() - GET
-// router.get('/GET/str_replace', regular_controller.str_replace_get);
+// Str_Replace() - GET
+router.get('/GET/str_replace', regular_controller.str_replace_get);
 
-// // Str_Replace() - POST Form
-// router.get('/POST/str_replace', regular_controller.str_replace_post);
-// router.post('/POST/str_replace', regular_controller.str_replace_post);
+// Str_Replace() - POST Form
+router.get('/POST/str_replace', regular_controller.str_replace_post);
+router.post('/POST/str_replace', regular_controller.str_replace_post);
 
-// // Create_Function() - GET
-// router.get('/GET/create_function', regular_controller.create_function_get);
+// Create_Function() - GET
+router.get('/GET/create_function', regular_controller.create_function_get);
 
-// // Create_Function() - POST Form
-// router.get('/POST/create_function', regular_controller.create_function_post);
-// router.post('/POST/create_function', regular_controller.create_function_post);
+// Create_Function() - POST Form
+router.get('/POST/create_function', regular_controller.create_function_post);
+router.post('/POST/create_function', regular_controller.create_function_post);
 
 module.exports = router;

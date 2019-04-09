@@ -190,6 +190,59 @@ function ping_an_address_hex(res, addr, template_name, template_title) {
   }
 }
 
+function execute_cmd(res, some_cmd, template_name, template_title) {
+    
+    var exec_res = 'Failed to Run...';
+
+    child = exec(some_cmd,
+        function (error, stdout, stderr) {
+            if (error) {
+                console.log(template_title + ' exec error: ' + error);
+                return res.render(template_name, { title: template_title, exec_res: some_cmd });
+            }
+
+            console.log('stdout: |' + stdout + '|');
+            console.log('stderr: |' + stderr + '|');
+
+            return res.render(template_name, { title: template_title, exec_res: stdout });
+
+        });
+}
+
+function ping_an_address_blind(res, addr, template_name, template_title) {
+
+    var someOutput = '';
+
+    console.log('User submitted addr: |' + addr + '|');
+    console.log(os.type()); // "Windows_NT"
+    console.log(os.release()); // "10.0.14393"
+    console.log(os.platform()); // "win32"
+    
+    var exec_res = 'Failed to Run...';
+    var ping_command = '/bin/ping -c 4 ';
+
+    if (os.type().includes('Windows NT')) {
+        ping_command = 'ping ';
+    }
+
+    child = exec(ping_command + addr,
+        function (error, stdout, stderr) {
+            if (error) {
+                console.log(template_name + ' exec error: ' + error);
+                return res.render(template_name, { title: template_title, exec_res: 'Oops ' + addr + ', you are dead beef :/' });
+            }
+
+            console.log('stdout: |' + stdout + '|');
+            console.log('stderr: |' + stderr + '|');
+
+            return res.render(template_name, { 
+                title: template_title,
+                exec_res: 'Hey ' + addr + ', you are alive!'
+            });
+            
+        });
+}
+
 exports.classic_get = function(req, res, next) {
   var cookie_name = "addr";
 
@@ -198,7 +251,7 @@ exports.classic_get = function(req, res, next) {
     ip = ip.substr(7)
   }
 
-  var cookie_value = ip
+  var cookie_value = ip;
 
   let options = {
       expire: (new Date).getTime() + (86400 * 30)
@@ -211,61 +264,52 @@ exports.classic_get = function(req, res, next) {
 };
 
 exports.b64_get = function(req, res, next) {
-  // var cookie_name = "addr";
 
-  // var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-  // if (ip.substr(0, 7) == "::ffff:") {
-  //   ip = ip.substr(7)
-  // }
+  var cookie_name = "user";
+  var cookie_value = Buffer.from('guest', 'ascii').toString('base64');
 
-  // var cookie_value = ip
+  let options = {
+      expire: (new Date).getTime() + (86400 * 30)
+  }
 
-  // let options = {
-  //     expire: (new Date).getTime() + (86400 * 30)
-  // }
-
-  // // Set cookie
-  // res.cookie(cookie_name, cookie_value, options) // options is optional
-  // addr = req.query.addr;
-  // return ping_an_address(res, cookie_value, 'cookie_b64', 'Cookie B64'); 
+  // Set cookie
+  res.cookie(cookie_name, cookie_value, options) // options is optional
+  
+  return execute_cmd(res, "echo Hello, '" + Buffer.from(cookie_value, 'base64').toString('ascii') + "'!", 'cookie_classic', 'Cookie B64 Encoded example')
 };
 
 exports.blind_get = function(req, res, next) {
-  // var cookie_name = "addr";
 
-  // var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-  // if (ip.substr(0, 7) == "::ffff:") {
-  //   ip = ip.substr(7)
-  // }
+  var cookie_name = "addr";
 
-  // var cookie_value = ip
+  var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  if (ip.substr(0, 7) == "::ffff:") {
+    ip = ip.substr(7)
+  }
 
-  // let options = {
-  //     expire: (new Date).getTime() + (86400 * 30)
-  // }
+  var cookie_value = ip;
 
-  // // Set cookie
-  // res.cookie(cookie_name, cookie_value, options) // options is optional
-  // addr = req.query.addr;
-  // return ping_an_address(res, cookie_value, 'cookie_blind', 'Cookie BLind'); 
+  let options = {
+      expire: (new Date).getTime() + (86400 * 30)
+  }
+
+  return ping_an_address_blind(res, cookie_value, 'cookie_classic', 'Cookie Blind'); 
 };
 
 exports.eval_get = function(req, res, next) {
-  // var cookie_name = "addr";
 
-  // var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-  // if (ip.substr(0, 7) == "::ffff:") {
-  //   ip = ip.substr(7)
-  // }
+  var cookie_name = "user";
+  var cookie_value = "guest";
 
-  // var cookie_value = ip
+  let options = {
+      expire: (new Date).getTime() + (86400 * 30)
+  }
 
-  // let options = {
-  //     expire: (new Date).getTime() + (86400 * 30)
-  // }
+  // Set cookie
+  res.cookie(cookie_name, cookie_value, options) // options is optional
 
-  // // Set cookie
-  // res.cookie(cookie_name, cookie_value, options) // options is optional
-  // addr = req.query.addr;
-  // return ping_an_address(res, cookie_value, 'cookie_eval', 'Cookie Eval'); 
+  var some_res = eval("\"Hello, " + cookie_value + "!\";");
+
+  return res.render('cookie_classic', {title: 'Cookie Eval', exec_res: some_res});
+
 };
