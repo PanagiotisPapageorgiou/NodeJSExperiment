@@ -891,7 +891,11 @@ exports.eval_get = function(req, res, next) {
 
 exports.eval_post = function(req, res, next) {
 
+  console.log(req.body);
+
   var user = req.body.user;
+
+  console.log('Provided user: |' + user + '|');
 
   if (user === undefined) {
     return res.render('regular_eval_post', { title: 'Eval regular example' });
@@ -962,13 +966,8 @@ exports.classic_json_post = function(req, res, next) {
     var someOutput = '';
 
     if (expected_data !== undefined) {
-        if (expected_data.hasOwnProperty('name')){
-            someName = expected_data.name;
-        }
-
-        if (expected_data.hasOwnProperty('addr')){
-            someAddr = expected_data.addr;
-        }
+        someName = expected_data.name;
+        someAddr = expected_data.addr;
 
         if (someAddr != null) {
             return ping_an_address_from_a_json(res, someAddr, someName, 'regular_simple_display', 'Classic (JSON) regular example');
@@ -994,9 +993,7 @@ exports.blind_json_post = function(req, res, next) {
 
     if (expected_data !== undefined) {
 
-        if (expected_data.hasOwnProperty('addr')){
-            someAddr = expected_data.addr;
-        }
+        someAddr = expected_data.addr;
 
         console.log('Submitted addr: ' + someAddr);
         if (someAddr != null) {
@@ -1013,15 +1010,12 @@ exports.eval_json_post = function(req, res, next) {
 
     var someName = null;
 
-    expected_data = {'name': ';while(1);'};
+    console.log(req.body);
+    console.log(JSON.stringify(expected_data));
 
     if (expected_data !== undefined) {
 
-        if (expected_data.hasOwnProperty('name')){
-            someName = expected_data.name;
-        }
-
-        console.log('Submitted name: ' + someName);
+        someName = expected_data.name;
 
         if (someName != null) {
             var myResJson = {

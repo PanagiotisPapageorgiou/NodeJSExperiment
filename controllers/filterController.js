@@ -112,12 +112,14 @@ exports.lax_domain_name = function(req, res, next) {
   } else { // Form submitting
       var addr = req.body.addr;
 
+      console.log(req.body);
       if (addr !== undefined) {
         var my_res = addr.match("^\\w+\\..*\\w+\\.\\w+$");
         if (addr.match("^\\w+\\..*\\w+\\.\\w+$") == null) {
           return res.render('regular_classic_post', { title: 'Regex for domain name validation', exec_res: 'Invalid domain format' });
         }
       } else {
+        console.log('Addr is undefined');
         return res.render('regular_classic_post', { title: 'Regex for domain name validation', exec_res: 'Invalid domain format' });
       }
 
