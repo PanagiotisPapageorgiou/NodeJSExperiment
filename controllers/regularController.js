@@ -32,7 +32,7 @@ function ping_an_address(res, addr, template_name, template_title) {
             console.log('stdout: |' + stdout + '|');
             console.log('stderr: |' + stderr + '|');
 
-            exec_res = null;
+            exec_res = stdout;
 
             if (stdout.includes('\n')) {
                 var lines = stdout.split('\n');
@@ -44,16 +44,11 @@ function ping_an_address(res, addr, template_name, template_title) {
                 }
             }
             
-            if (exec_res == null) {
-                console.log(template_name + ' Failed to locate of average results of ping!')
-                return res.render(template_name, { title: template_title });
-            }
-            else {
-                return res.render(template_name, { 
-                    title: template_title,
-                    exec_res: exec_res
-                });
-            }
+            return res.render(template_name, { 
+                title: template_title,
+                exec_res: exec_res
+            });
+
         });
   }
 }
@@ -92,7 +87,7 @@ function ping_an_address_b64(res, addr, template_name, template_title) {
                 console.log('stdout: |' + stdout + '|');
                 console.log('stderr: |' + stderr + '|');
 
-                exec_res = null;
+                exec_res = stdout;
 
                 if (stdout.includes('\n')) {
                     var lines = stdout.split('\n');
@@ -104,16 +99,11 @@ function ping_an_address_b64(res, addr, template_name, template_title) {
                     }
                 }
                 
-                if (exec_res == null) {
-                    console.log(template_name + ' Failed to locate of average results of ping!')
-                    return res.render(template_name, { title: template_title });
-                }
-                else {
-                    return res.render(template_name, { 
-                        title: template_title,
-                        exec_res: exec_res
-                    });
-                }
+                return res.render(template_name, { 
+                    title: template_title,
+                    exec_res: exec_res
+                });
+
             });
     } else {
         return res.render(template_name, { 
@@ -158,7 +148,7 @@ function ping_an_address_hex(res, addr, template_name, template_title) {
                 console.log('stdout: |' + stdout + '|');
                 console.log('stderr: |' + stderr + '|');
 
-                exec_res = null;
+                exec_res = stdout;
 
                 if (stdout.includes('\n')) {
                     var lines = stdout.split('\n');
@@ -170,16 +160,11 @@ function ping_an_address_hex(res, addr, template_name, template_title) {
                     }
                 }
                 
-                if (exec_res == null) {
-                    console.log(template_name + ' Failed to locate of average results of ping!')
-                    return res.render(template_name, { title: template_title });
-                }
-                else {
-                    return res.render(template_name, { 
-                        title: template_title,
-                        exec_res: exec_res
-                    });
-                }
+                return res.render(template_name, { 
+                    title: template_title,
+                    exec_res: exec_res
+                });
+                
             });
     } else {
         return res.render(template_name, { 
@@ -218,7 +203,7 @@ function ping_an_address_quote(res, addr, template_name, template_title) {
             console.log('stdout: |' + stdout + '|');
             console.log('stderr: |' + stderr + '|');
 
-            exec_res = null;
+            exec_res = stdout;
 
             if (stdout.includes('\n')) {
                 var lines = stdout.split('\n');
@@ -230,16 +215,11 @@ function ping_an_address_quote(res, addr, template_name, template_title) {
                 }
             }
             
-            if (exec_res == null) {
-                console.log(template_name + ' Failed to locate of average results of ping!')
-                return res.render(template_name, { title: template_title });
-            }
-            else {
-                return res.render(template_name, { 
-                    title: template_title,
-                    exec_res: exec_res
-                });
-            }
+            return res.render(template_name, { 
+                title: template_title,
+                exec_res: exec_res
+            });
+
         });
   }
 }
