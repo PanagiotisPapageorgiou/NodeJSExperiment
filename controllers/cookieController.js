@@ -242,7 +242,15 @@ exports.classic_get = function(req, res, next) {
 
   // Set cookie
   res.cookie(cookie_name, cookie_value, options) // options is optional
-  addr = req.query.addr;
+
+  if (req.cookies.addr === undefined) {
+      return res.render('Cookie Classic', {
+          title: 'cookie_classic',
+          exec_res: 'Cookie named addr is not set!'
+      });
+  }
+
+  cookie_value = req.cookies.addr;
   return ping_an_address(res, cookie_value, 'cookie_classic', 'Cookie Classic');
 };
 
@@ -258,7 +266,14 @@ exports.b64_get = function(req, res, next) {
   // Set cookie
   res.cookie(cookie_name, cookie_value, options) // options is optional
 
-  return execute_cmd(res, "echo Hello, '" + Buffer.from(cookie_value, 'base64').toString('ascii') + "'!", 'cookie_classic', 'Cookie B64 Encoded example')
+  if (req.cookies.user === undefined) {
+      return res.render('Cookie B64 Encoded example', {
+          title: 'cookie_classic',
+          exec_res: 'Cookie named user is not set!'
+      });
+  }
+
+  return execute_cmd(res, "echo Hello, '" + Buffer.from(req.cookies.user, 'base64').toString('ascii') + "'!", 'cookie_classic', 'Cookie B64 Encoded example')
 };
 
 exports.blind_get = function(req, res, next) {
@@ -276,6 +291,18 @@ exports.blind_get = function(req, res, next) {
       expire: (new Date).getTime() + (86400 * 30)
   }
 
+  // Set cookie
+  res.cookie(cookie_name, cookie_value, options) // options is optional
+
+  if (req.cookies.addr === undefined) {
+      return res.render('Cookie Blind', {
+          title: 'cookie_classic',
+          exec_res: 'Cookie named addr is not set!'
+      });
+  }
+
+  cookie_value = req.cookies.addr;
+
   return ping_an_address_blind(res, cookie_value, 'cookie_classic', 'Cookie Blind');
 };
 
@@ -291,7 +318,16 @@ exports.eval_get = function(req, res, next) {
   // Set cookie
   res.cookie(cookie_name, cookie_value, options) // options is optional
 
-  var some_res = eval("\"Hello, " + cookie_value + "!\";");
+  if (req.cookies.user === undefined) {
+      return res.render('Cookie Eval', {
+          title: 'cookie_classic',
+          exec_res: 'Cookie named user is not set!'
+      });
+  }
+
+  var some_res = eval("\"Hello, " + req.cookies.user + "!\";");
+
+  console.log('Will return: |' + some_res + '|');
 
   return res.render('cookie_classic', {title: 'Cookie Eval', exec_res: some_res});
 
