@@ -7,14 +7,14 @@ var child;
 function ping_an_address(res, addr, template_name, template_title) {
 
   if (addr === undefined) {
-    console.log('Page load for ' + template_name);    
+    console.log('Page load for ' + template_name);
     return res.render(template_name, { title: template_title });
   } else {
     console.log('User submitted addr: |' + addr + '|');
     console.log(os.type()); // "Windows_NT"
     console.log(os.release()); // "10.0.14393"
     console.log(os.platform()); // "win32"
-    
+
     var exec_res = 'Failed to Run...';
     var ping_command = '/bin/ping -c 4 ';
 
@@ -32,7 +32,7 @@ function ping_an_address(res, addr, template_name, template_title) {
             console.log('stdout: |' + stdout + '|');
             console.log('stderr: |' + stderr + '|');
 
-            exec_res = null;
+            exec_res = stdout;
 
             if (stdout.includes('\n')) {
                 var lines = stdout.split('\n');
@@ -43,17 +43,11 @@ function ping_an_address(res, addr, template_name, template_title) {
                     }
                 }
             }
-            
-            if (exec_res == null) {
-                console.log(template_name + ' Failed to locate of average results of ping!')
-                return res.render(template_name, { title: template_title });
-            }
-            else {
-                return res.render(template_name, { 
-                    title: template_title,
-                    exec_res: exec_res
-                });
-            }
+
+              return res.render(template_name, {
+                  title: template_title,
+                  exec_res: exec_res
+              });
         });
   }
 }
@@ -62,11 +56,11 @@ function ping_an_address_with_quotes(res, addr, template_name, template_title) {
 
   var pre_phrase = 'Ping Results: ';
 
-  if (addr === undefined) {   
+  if (addr === undefined) {
     return res.render(template_name, { title: template_title, exec_res: pre_phrase });
   } else {
     console.log('User submitted addr: |' + addr + '|');
-    
+
     var exec_res = 'Failed to Run...';
     var ping_command = '/bin/ping -c 4 ';
 
@@ -80,7 +74,7 @@ function ping_an_address_with_quotes(res, addr, template_name, template_title) {
             console.log('stdout: |' + stdout + '|');
             console.log('stderr: |' + stderr + '|');
 
-            exec_res = null;
+            exec_res = stdout;
 
             if (stdout.includes('\n')) {
                 var lines = stdout.split('\n');
@@ -91,17 +85,11 @@ function ping_an_address_with_quotes(res, addr, template_name, template_title) {
                     }
                 }
             }
-            
-            if (exec_res == null) {
-                console.log(template_name + ' Failed to locate of average results of ping!')
-                return res.render(template_name, { title: template_title, exec_res: pre_phrase });
-            }
-            else {
-                return res.render(template_name, { 
-                    title: template_title,
-                    exec_res: pre_phrase + exec_res
-                });
-            }
+
+            return res.render(template_name, {
+                title: template_title,
+                exec_res: pre_phrase + exec_res
+            });
         });
   }
 }

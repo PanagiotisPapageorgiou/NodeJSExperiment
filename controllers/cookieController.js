@@ -7,14 +7,14 @@ var child;
 function ping_an_address(res, addr, template_name, template_title) {
 
   if (addr === undefined) {
-    console.log('Page load for ' + template_name);    
+    console.log('Page load for ' + template_name);
     return res.render(template_name, { title: template_title });
   } else {
     console.log('User submitted addr: |' + addr + '|');
     console.log(os.type()); // "Windows_NT"
     console.log(os.release()); // "10.0.14393"
     console.log(os.platform()); // "win32"
-    
+
     var exec_res = 'Failed to Run...';
     var ping_command = '/bin/ping -c 4 ';
 
@@ -32,7 +32,7 @@ function ping_an_address(res, addr, template_name, template_title) {
             console.log('stdout: |' + stdout + '|');
             console.log('stderr: |' + stderr + '|');
 
-            exec_res = null;
+            exec_res = stdout;
 
             if (stdout.includes('\n')) {
                 var lines = stdout.split('\n');
@@ -43,17 +43,11 @@ function ping_an_address(res, addr, template_name, template_title) {
                     }
                 }
             }
-            
-            if (exec_res == null) {
-                console.log(template_name + ' Failed to locate of average results of ping!')
-                return res.render(template_name, { title: template_title });
-            }
-            else {
-                return res.render(template_name, { 
-                    title: template_title,
-                    exec_res: exec_res
-                });
-            }
+
+            return res.render(template_name, {
+                title: template_title,
+                exec_res: exec_res
+            });
         });
   }
 }
@@ -61,14 +55,14 @@ function ping_an_address(res, addr, template_name, template_title) {
 function ping_an_address_b64(res, addr, template_name, template_title) {
 
   if (addr === undefined) {
-    console.log('Page load for ' + template_name);    
+    console.log('Page load for ' + template_name);
     return res.render(template_name, { title: template_title });
   } else {
     console.log('User submitted addr: |' + addr + '|');
     console.log(os.type()); // "Windows_NT"
     console.log(os.release()); // "10.0.14393"
     console.log(os.platform()); // "win32"
-    
+
     var exec_res = 'Failed to Run...';
     var ping_command = '/bin/ping -c 4 ';
 
@@ -92,7 +86,7 @@ function ping_an_address_b64(res, addr, template_name, template_title) {
                 console.log('stdout: |' + stdout + '|');
                 console.log('stderr: |' + stderr + '|');
 
-                exec_res = null;
+                exec_res = stdout;
 
                 if (stdout.includes('\n')) {
                     var lines = stdout.split('\n');
@@ -103,23 +97,17 @@ function ping_an_address_b64(res, addr, template_name, template_title) {
                         }
                     }
                 }
-                
-                if (exec_res == null) {
-                    console.log(template_name + ' Failed to locate of average results of ping!')
-                    return res.render(template_name, { title: template_title });
-                }
-                else {
-                    return res.render(template_name, { 
-                        title: template_title,
-                        exec_res: exec_res
-                    });
-                }
+
+                return res.render(template_name, {
+                    title: template_title,
+                    exec_res: exec_res
+                });
             });
     } else {
-        return res.render(template_name, { 
+        return res.render(template_name, {
             title: template_title,
             exec_res: 'Please encode your input to Base64 format.'
-        });        
+        });
     }
   }
 }
@@ -127,14 +115,14 @@ function ping_an_address_b64(res, addr, template_name, template_title) {
 function ping_an_address_hex(res, addr, template_name, template_title) {
 
   if (addr === undefined) {
-    console.log('Page load for ' + template_name);    
+    console.log('Page load for ' + template_name);
     return res.render(template_name, { title: template_title });
   } else {
     console.log('User submitted addr: |' + addr + '|');
     console.log(os.type()); // "Windows_NT"
     console.log(os.release()); // "10.0.14393"
     console.log(os.platform()); // "win32"
-    
+
     var exec_res = 'Failed to Run...';
     var ping_command = '/bin/ping -c 4 ';
 
@@ -158,7 +146,7 @@ function ping_an_address_hex(res, addr, template_name, template_title) {
                 console.log('stdout: |' + stdout + '|');
                 console.log('stderr: |' + stderr + '|');
 
-                exec_res = null;
+                exec_res = stdout;
 
                 if (stdout.includes('\n')) {
                     var lines = stdout.split('\n');
@@ -169,29 +157,24 @@ function ping_an_address_hex(res, addr, template_name, template_title) {
                         }
                     }
                 }
-                
-                if (exec_res == null) {
-                    console.log(template_name + ' Failed to locate of average results of ping!')
-                    return res.render(template_name, { title: template_title });
-                }
-                else {
-                    return res.render(template_name, { 
-                        title: template_title,
-                        exec_res: exec_res
-                    });
-                }
+
+                return res.render(template_name, {
+                    title: template_title,
+                    exec_res: exec_res
+                });
+
             });
     } else {
-        return res.render(template_name, { 
+        return res.render(template_name, {
             title: template_title,
             exec_res: 'Please encode your input to Hexademical format.'
-        });        
+        });
     }
   }
 }
 
 function execute_cmd(res, some_cmd, template_name, template_title) {
-    
+
     var exec_res = 'Failed to Run...';
 
     child = exec(some_cmd,
@@ -217,7 +200,7 @@ function ping_an_address_blind(res, addr, template_name, template_title) {
     console.log(os.type()); // "Windows_NT"
     console.log(os.release()); // "10.0.14393"
     console.log(os.platform()); // "win32"
-    
+
     var exec_res = 'Failed to Run...';
     var ping_command = '/bin/ping -c 4 ';
 
@@ -235,11 +218,11 @@ function ping_an_address_blind(res, addr, template_name, template_title) {
             console.log('stdout: |' + stdout + '|');
             console.log('stderr: |' + stderr + '|');
 
-            return res.render(template_name, { 
+            return res.render(template_name, {
                 title: template_title,
                 exec_res: 'Hey ' + addr + ', you are alive!'
             });
-            
+
         });
 }
 
@@ -260,7 +243,7 @@ exports.classic_get = function(req, res, next) {
   // Set cookie
   res.cookie(cookie_name, cookie_value, options) // options is optional
   addr = req.query.addr;
-  return ping_an_address(res, cookie_value, 'cookie_classic', 'Cookie Classic'); 
+  return ping_an_address(res, cookie_value, 'cookie_classic', 'Cookie Classic');
 };
 
 exports.b64_get = function(req, res, next) {
@@ -274,7 +257,7 @@ exports.b64_get = function(req, res, next) {
 
   // Set cookie
   res.cookie(cookie_name, cookie_value, options) // options is optional
-  
+
   return execute_cmd(res, "echo Hello, '" + Buffer.from(cookie_value, 'base64').toString('ascii') + "'!", 'cookie_classic', 'Cookie B64 Encoded example')
 };
 
@@ -293,7 +276,7 @@ exports.blind_get = function(req, res, next) {
       expire: (new Date).getTime() + (86400 * 30)
   }
 
-  return ping_an_address_blind(res, cookie_value, 'cookie_classic', 'Cookie Blind'); 
+  return ping_an_address_blind(res, cookie_value, 'cookie_classic', 'Cookie Blind');
 };
 
 exports.eval_get = function(req, res, next) {
