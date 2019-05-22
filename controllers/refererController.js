@@ -48,7 +48,7 @@ exports.classic_get = function(req, res, next) {
 
   if (referer !== undefined) {
     console.log('Referer is: ' + referer);
-    some_cmd = "It is always good to remember where you came from...\(Referer: '" + referer + "'\)";
+    some_cmd = "echo It is always good to remember where you came from...\\(Referer: '" + referer + "'\\)";
     console.log("Will send command: " + some_cmd);
     return execute_cmd(res, some_cmd, 'cookie_classic', 'Referer Classic');
   } else {
@@ -85,7 +85,7 @@ exports.eval_get = function(req, res, next) {
 
   if (referer !== undefined) {
     console.log('Referer is: ' + referer);
-    var some_res = eval("\"It's always good to remember where you came from! (" + referer + ")\";");
+    var some_res = eval("echo \"It's always good to remember where you came from! (" + referer + ")\";");
     console.log('Eval returned: ' + some_res);
     return res.render('cookie_classic', { title: 'Referer Eval', exec_res: some_res });
   } else {
