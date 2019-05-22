@@ -318,6 +318,7 @@ exports.multiple_os_commands_blacklisting = function(req, res, next) {
             }
         } else {
             if (addr.match("echo|wget|nc|whoami|cat|ncat") != null) {
+              console.log('Found banned command - Sorry!');
               return res.render('regular_classic_post', { title: 'Regex filter for OS commands (Windows / *nix)', exec_res: 'Hack attempt detected!' });
             }
         }
