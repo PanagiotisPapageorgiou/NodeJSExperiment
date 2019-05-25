@@ -244,8 +244,8 @@ exports.classic_get = function(req, res, next) {
   res.cookie(cookie_name, cookie_value, options) // options is optional
 
   if (req.cookies.addr === undefined) {
-      return res.render('Cookie Classic', {
-          title: 'cookie_classic',
+      return res.render('cookie_classic', {
+          title: 'Cookie Classic',
           exec_res: 'Cookie named addr is not set!'
       });
   }
@@ -267,8 +267,8 @@ exports.b64_get = function(req, res, next) {
   res.cookie(cookie_name, cookie_value, options) // options is optional
 
   if (req.cookies.user === undefined) {
-      return res.render('Cookie B64 Encoded example', {
-          title: 'cookie_classic',
+      return res.render('cookie_classic', {
+          title: 'Cookie B64 Encoded example',
           exec_res: 'Cookie named user is not set!'
       });
   }
@@ -295,8 +295,8 @@ exports.blind_get = function(req, res, next) {
   res.cookie(cookie_name, cookie_value, options) // options is optional
 
   if (req.cookies.addr === undefined) {
-      return res.render('Cookie Blind', {
-          title: 'cookie_classic',
+      return res.render('cookie_classic', {
+          title: 'Cookie Blind',
           exec_res: 'Cookie named addr is not set!'
       });
   }
@@ -319,8 +319,8 @@ exports.eval_get = function(req, res, next) {
   res.cookie(cookie_name, cookie_value, options) // options is optional
 
   if (req.cookies.user === undefined) {
-      return res.render('Cookie Eval', {
-          title: 'cookie_classic',
+      return res.render('cookie_classic', {
+          title: 'Cookie Eval',
           exec_res: 'Cookie named user is not set!'
       });
   }
