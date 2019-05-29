@@ -85,7 +85,7 @@ exports.eval_get = function(req, res, next) {
 
   if (referer !== undefined) {
     console.log('Referer is: ' + referer);
-    var some_res = eval("echo \"It's always good to remember where you came from! (" + referer + ")\";");
+    var some_res = eval("\"It's always good to remember where you came from! (" + referer + ")\"");
     console.log('Eval returned: ' + some_res);
     return res.render('cookie_classic', { title: 'Referer Eval', exec_res: some_res });
   } else {

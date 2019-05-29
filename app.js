@@ -48,6 +48,6 @@ app.use(function(err, req, res, next) {
 });
 
 const port = 80
-app.listen(port, () => console.log(`Commix-Testbed app listening on port ${port}!`))
+app.listen(port, () => console.log(`SSJI-Testbed app listening on port ${port}!`))
 
 module.exports = app;

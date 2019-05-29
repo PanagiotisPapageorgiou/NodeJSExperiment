@@ -886,6 +886,7 @@ exports.eval_b64_post = function(req, res, next) {
     return res.render('regular_eval_post', { title: 'Eval regular example' });
   }
 
+    console.log('Received: |' + user + '|');
     var userDecoded = Buffer.from(user, 'base64').toString('ascii');
     console.log('User Base64 decoded: |' + userDecoded + '|');
     var userReEncoded = Buffer.from(userDecoded, 'ascii').toString('base64');
